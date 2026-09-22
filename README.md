@@ -20,7 +20,14 @@
 ## Why
 
 Agents with three research MCP servers tend to call the wrong one, call it
-unbounded, and forget to cite. This skill fixes the process, not the tools:
+unbounded, forget to cite, and treat one source as proof. This skill fixes the
+process, not the tools. It picks a mode first:
+
+- **Lookup**: one fact with one owner. Answered in a single routed pass.
+- **Investigate**: several facets, a contested claim, or a decision riding on
+  the answer. Runs scope → gather → triangulate → stress-test → synthesize.
+
+Every call in either mode takes the same five steps:
 
 | Step | What the agent does |
 |---|---|
@@ -28,10 +35,12 @@ unbounded, and forget to cite. This skill fixes the process, not the tools:
 | **Route** | Match the question to a tool via a single table, with a fallback per row |
 | **Bound** | Set the cost ceiling on every call before issuing it |
 | **Refund** | Claim the firecrawl search-feedback credit |
-| **Deliver** | A cited chat answer, or one Markdown research file from primary sources |
+| **Deliver** | A cited chat answer, or a structured report with graded sources |
 
-Done means every claim traces to a source URL or library ID, and no call was
-made that the route did not pick.
+A lookup is done when every claim traces to a source URL or library ID. An
+investigation is done when every load-bearing claim has two independent
+sources or an explicit `single-source` label, and every contradiction found is
+resolved or reported.
 
 ## Install
 
@@ -62,15 +71,17 @@ Any subset works; the route table's fallback column covers a missing server.
 
 ```
 research-stack/
-├── SKILL.md                      # the skill: load → route → bound → refund → deliver
+├── SKILL.md                      # mode switch + load → route → bound → refund → deliver
 ├── references/
-│   └── costs-and-limits.md       # credit tables, rate limits, deployment deltas, sources
+│   ├── investigate.md            # multi-source method and report shape
+│   └── costs-and-limits.md       # credit tables, rate limits, security notes, sources
 └── assets/
     └── research-stack.svg
 ```
 
-`SKILL.md` is what the agent runs. `references/` is loaded only when the agent
-needs to justify a tool choice on cost or cite a claim.
+`SKILL.md` is what the agent runs. `references/investigate.md` loads only in
+Investigate mode; `references/costs-and-limits.md` only when the agent needs to
+justify a tool choice on cost or cite a claim.
 
 ## Triggers
 
@@ -80,12 +91,16 @@ The skill fires when a question needs facts from outside the repo:
 - current events, "latest", a comparison across sources
 - the contents of a known URL, or which pages of a site matter
 - a known bug, error message, or API contract
+- papers and scientific literature
+- an open-ended question that needs a multi-source investigation
 - or when the agent is unsure which of the three servers fits
 
 ## Contributing
 
-Pricing and rate limits drift. If a figure in `references/costs-and-limits.md`
-is stale, open a PR with the vendor source that supersedes it.
+Pricing, rate limits, and tool schemas drift. Each fact has one home:
+parameter names and call shapes in `SKILL.md` § Bound, prices and limits in
+`references/costs-and-limits.md`. When a loaded tool schema or a vendor page
+disagrees, fix that one place and cite the source in the PR.
 
 ## License
 

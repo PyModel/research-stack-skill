@@ -1,10 +1,12 @@
 # Cost, rate limits, and sourcing — research-stack
 
 Reference only. Load when you need to justify a tool choice on cost, or cite a
-claim. Runtime guidance lives in `../SKILL.md`.
+claim. Call shapes (parameter names, formats, caps) live in `../SKILL.md`
+§ Bound and nowhere else; the loaded tool schema beats both files.
 
-Figures are as of 2026-08-05 and come from vendor docs (cited at the bottom).
-Pricing changes; treat these as orders of magnitude, not contract terms.
+Figures come from vendor docs (cited at the bottom), first gathered 2026-08-05;
+Tavily search rows and Firecrawl scrape/search rows re-checked 2026-09-22. Pricing changes; treat these as
+orders of magnitude, not contract terms.
 
 ---
 
@@ -25,11 +27,13 @@ Server-side reranker (~Jan 2026) cut average token consumption ~65%
 ### Firecrawl
 | Item | Cost |
 |---|---|
-| `firecrawl_scrape` | ~1 credit/page (0 on `maxAge` cache hit) |
-| `firecrawl_search` | 2 credits, refundable to 1 via `firecrawl_search_feedback` |
+| `firecrawl_scrape` | 1 credit/page, cache hit or live: `maxAge` buys speed, not credits |
+| scrape add-ons | `json`, `query`/`question`, `highlights`, `audio`, `video`, `redactPII`: +4/page each; PDF parsing +1/PDF page; ZDR +1/page; `lockdown` cache hit +4 (miss bills 1) |
+| `firecrawl_search` | 2 credits per 10 results, rounded up; 1 credit refundable via `firecrawl_search_feedback` |
 | `firecrawl_map` | 1 credit per request, regardless of site size |
 | `firecrawl_crawl` | 1 credit per discovered page |
 | `firecrawl_extract`, `firecrawl_agent` | variable, most expensive tier |
+| `firecrawl_research_*` (papers) | not published in the sources checked; UNVERIFIED |
 
 Feedback refunds are capped at 100/team/UTC day (`dailyCapReached: true` when
 exhausted; `feedbackErrorCode: "TEAM_OPTED_OUT"` when the team opted out).
@@ -42,36 +46,21 @@ webhook payload carries only the diff plus an AI-judged `judgment.meaningful` fl
 |---|---|
 | `tavily_search` `basic` | 1 credit |
 | `tavily_search` `advanced` | 2 credits |
+| `tavily_search` `fast` | 1 credit |
+| `tavily_search` `ultra-fast` | 0.5–1 credit: the changelog says 1, the search tutorial says 0.5 |
 | `tavily_extract` `basic` | 1 credit per 5 URLs |
 | `tavily_extract` `advanced` | 2 credits per 5 URLs |
 | `tavily_map` | 1 credit per 10 pages (2 with `instructions`) |
 | `tavily_crawl` | map cost + extract cost combined |
 | `tavily_research` `mini` | 4–110 credits |
 | `tavily_research` `pro` | 15–250 credits |
+| `tavily_research` `auto` (default) | depth chosen server-side; no separate price published, so budget for the `pro` ceiling |
 
 Free tier: 1,000 credits/month.
 
 **Rate limits.** Search/Extract 100 RPM (dev) / 1,000 RPM (prod).
 Crawl is capped at 100 RPM regardless of plan. **Research is 20 RPM** — a
 research-heavy agent is throughput-bound long before it is credit-bound.
-Research polling blocks up to 5 min (`mini`) / 15 min (`pro`).
-
----
-
-## Deployment deltas — what this MCP client actually exposes
-
-Verified against loaded tool schemas on 2026-08-05. Several widely-circulated
-recommendations do not apply here:
-
-| Commonly recommended | Reality in this deployment |
-|---|---|
-| `tavily_search` with `topic: "news"` / `"finance"` | `topic` is `const: "general"`. Use `time_range` + `include_domains` for recency instead. |
-| `tavily_search` `auto_parameters: false` | No such parameter. `search_depth` is already explicit; default is `basic`. |
-| `tavily_extract` `chunks_per_source` | No such parameter. `query` reranks chunks; that is the whole knob. |
-| `tavily_research` `output_schema` / `citation_format` / `files` / `include_domains` | Not exposed. Only `input` and `model`. Ask for the output shape inside `input` prose. |
-| `firecrawl_scrape` `formats: [{type:"json", schema:…}]` | `formats` is a flat string enum. Schema and prompt go in a sibling `jsonOptions` object. |
-| `firecrawl_scrape` `max_age` | Spelled `maxAge` (camelCase, like every Firecrawl param). |
-| `DEFAULT_PARAMETERS` / `TAVILY_HUMAN_ID` env injection | Server-side MCP config, not agent-reachable. Set per-call defaults in the skill instead. |
 
 ---
 
@@ -96,8 +85,8 @@ recommendations do not apply here:
   Allow-lists still naming `mcp__context7__get-library-docs` will trigger
   permission prompts.
 - Two Context7 servers may be connected simultaneously: `mcp__context7__*` and
-  `mcp__claude_ai_Context7__*`. They are the same upstream; use whichever is
-  present and do not query both.
+  `mcp__claude_ai_Context7__*`. They are the same upstream; `../SKILL.md`
+  § Guardrails says which one to query.
 - Tavily's hyphenated `tavily-search` / `tavily-extract` names and the
   `searchQNA` / `searchContext` variants seen in third-party write-ups are
   outdated. Current names are underscored.
@@ -107,6 +96,8 @@ recommendations do not apply here:
 ## Sources
 
 **Firecrawl**
+- https://docs.firecrawl.dev/billing
+- https://docs.firecrawl.dev/features/fast-scraping
 - https://github.com/firecrawl/firecrawl-mcp-server
 - https://docs.firecrawl.dev/features/monitoring
 - https://www.firecrawl.dev/blog/firecrawl-monitoring-launch
@@ -126,4 +117,6 @@ recommendations do not apply here:
 - https://docs.tavily.com/documentation/best-practices/best-practices-extract
 - https://docs.tavily.com/documentation/api-credits
 - https://docs.tavily.com/documentation/rate-limits
+- https://docs.tavily.com/changelog
+- https://docs.tavily.com/examples/quick-tutorials/search-api
 - https://github.com/tavily-ai/tavily-mcp/issues/188

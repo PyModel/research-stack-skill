@@ -18,7 +18,7 @@
 
   <!-- router -->
   <rect x="250" y="130" width="130" height="90" rx="12" fill="#1d4ed8" stroke="#3b82f6"/>
-  <text x="315" y="165" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">route</text>
+  <text x="315" y="165" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">mode · route</text>
   <text x="315" y="185" fill="#dbeafe" font-size="12" text-anchor="middle">bound · refund</text>
   <text x="315" y="203" fill="#dbeafe" font-size="12" text-anchor="middle">deliver</text>
 
@@ -36,7 +36,7 @@
 
     <rect x="460" y="224" width="180" height="46" rx="10" fill="#581c87" stroke="#a855f7"/>
     <text x="550" y="244" fill="#faf5ff" font-size="13" font-weight="700" text-anchor="middle">firecrawl</text>
-    <text x="550" y="261" fill="#e9d5ff" font-size="11" text-anchor="middle">page extraction &amp; crawl</text>
+    <text x="550" y="261" fill="#e9d5ff" font-size="11" text-anchor="middle">pages, code &amp; papers</text>
   </g>
   <path d="M380 175 C420 175 420 135 458 135" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
   <path d="M380 175 L458 191" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
@@ -45,7 +45,7 @@
   <!-- output -->
   <rect x="700" y="140" width="140" height="70" rx="12" fill="#334155" stroke="#475569"/>
   <text x="770" y="170" fill="#f1f5f9" font-size="14" font-weight="600" text-anchor="middle">cited answer</text>
-  <text x="770" y="192" fill="#cbd5e1" font-size="12" text-anchor="middle">or research file</text>
+  <text x="770" y="192" fill="#cbd5e1" font-size="12" text-anchor="middle">or graded report</text>
   <path d="M640 135 C670 135 670 175 698 175" fill="none" stroke="#94a3b8" stroke-width="2"/>
   <path d="M640 191 L698 177" fill="none" stroke="#94a3b8" stroke-width="2"/>
   <path d="M640 247 C670 247 670 175 698 175" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
