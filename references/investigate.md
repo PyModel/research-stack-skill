@@ -24,7 +24,9 @@ call. It holds:
 - **Budget.** Credit ceiling for the whole run: by default ≤30 tavily credits
   and ≤20 firecrawl credits, with no `tavily_research` unless the user asks
   for it (one run can cost more than the whole ceiling, and its output grades
-  as tier C). Hitting the ceiling ends gathering with stop reason `budget`; the
+  as tier C). Alexandria reads, `people_company_*`, and `jobs_search` spend
+  against the firecrawl ceiling; discovery through `alexandria_library_search`
+  is free. Hitting the ceiling ends gathering with stop reason `budget`; the
   report offers to extend.
 
 Done when every sub-question has a route row and the budget is written down.
@@ -43,7 +45,7 @@ Grade every source as you record it:
 
 | Tier | What counts |
 |---|---|
-| **A** | The owner of the fact: official docs, source code, specs, changelogs, release notes, papers, first-party data |
+| **A** | The owner of the fact: official docs, source code, specs, changelogs, release notes, papers, first-party data (an Alexandria record counts when its `source` is the owner, e.g. a registry, filing system, or government API) |
 | **B** | Maintained, dated, attributable secondary: vendor engineering blogs, reputable press, benchmarks with published method |
 | **C** | Undated, anonymous, aggregated, SEO, forum answers, AI summaries (including `tavily_research` output: treat its claims as leads, cite its sources) |
 

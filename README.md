@@ -63,7 +63,7 @@ Three MCP servers connected to the agent, under these tool prefixes:
 |---|---|---|
 | Context7 | `mcp__context7__*` | https://github.com/upstash/context7 |
 | Tavily | `mcp__tavily__*` | https://github.com/tavily-ai/tavily-mcp |
-| Firecrawl | `mcp__firecrawl__*` | https://github.com/firecrawl/firecrawl-mcp-server |
+| Firecrawl (includes Alexandria; needs an API key) | `mcp__firecrawl__*` | https://github.com/firecrawl/firecrawl-mcp-server |
 
 Any subset works; the route table's fallback column covers a missing server.
 
@@ -92,6 +92,10 @@ The skill fires when a question needs facts from outside the repo:
 - the contents of a known URL, or which pages of a site matter
 - a known bug, error message, or API contract
 - papers and scientific literature
+- structured records via Firecrawl Alexandria: companies, people, jobs,
+  filings, prices, public records, packages
+- business workflows (sales prep, prospect lists, competitor or market
+  research) that match a playbook under Alexandria's `/library/skills`
 - an open-ended question that needs a multi-source investigation
 - or when the agent is unsure which of the three servers fits
 

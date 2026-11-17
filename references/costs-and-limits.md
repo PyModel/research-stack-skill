@@ -35,6 +35,23 @@ Server-side reranker (~Jan 2026) cut average token consumption ~65%
 | `firecrawl_extract`, `firecrawl_agent` | variable, most expensive tier |
 | `firecrawl_research_*` (papers) | not published in the sources checked; UNVERIFIED |
 
+### Firecrawl Alexandria
+Checked 2026-11-17 against the live MCP tool descriptions and library (catalogue
+of 3,337 capabilities from 582 providers in 34 categories).
+
+| Item | Cost |
+|---|---|
+| `alexandria_library_search` (browse `/library`, read contracts, `/library/skills`) | free |
+| `alexandria_library_read` | billed per executed capability; the response's `creditsCost` gives the total. Prices are not shown in contracts. Measured 2026-11-17: 2 × `package-registry-metadata-download-stats/packages/downloads` in one read = 2 credits; the Alexandria feedback after it refunded 1 |
+| `people_company_enrich` | each provider that finds a value is charged its listed price; misses free; uncapped without `max_credits` |
+| `people_company_search` | each provider call charged its listed price; default cap 1000 credits |
+| `jobs_search` | each provider read charged its listed price; default cap 200 credits |
+| `firecrawl_save_skill` | free |
+| `firecrawl_feedback` (`endpoint: "alexandria"`) | refunds 1 credit when eligible; within 20 min of the team's latest Alexandria call; daily caps per website and per team |
+
+Some providers require terms accepted in the Firecrawl dashboard; the response
+names the URL.
+
 Feedback refunds are capped at 100/team/UTC day (`dailyCapReached: true` when
 exhausted; `feedbackErrorCode: "TEAM_OPTED_OUT"` when the team opted out).
 Published P95 latency for cloud scrapes ≈ 3.4s. Monitoring (`firecrawl_monitor_*`)
@@ -103,6 +120,9 @@ research-heavy agent is throughput-bound long before it is credit-bound.
 - https://www.firecrawl.dev/blog/firecrawl-monitoring-launch
 - https://www.firecrawl.dev/blog/mastering-firecrawl-search-endpoint
 - https://github.com/firecrawl/cli/blob/main/skills/firecrawl-search/SKILL.md
+- https://www.firecrawl.dev/use-cases/ai-mcps
+- https://www.firecrawl.dev/blog/what-is-alexandria
+- Live `mcp__firecrawl__*` tool descriptions and `/library/README.md` (2026-11-17)
 
 **Context7**
 - https://github.com/upstash/context7
